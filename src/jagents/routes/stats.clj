@@ -1,22 +1,18 @@
 (ns jagents.routes.stats
   (:require [compojure.core :refer :all]
-            [jagents.stats :refer :all]
+            [jagents.stats :as stats]
             [org.httpkit.server :refer :all]))
 
-(defn get-stats!
-  [request]
-  {:status 200
-   :body (str @stats-data)})
 
+(defn- populate-stats
+  [stats-list channel]
+  (doseq [value stats-list] (send! channel value)))
 
-(defn get-stats-ws! [request]
+(defn get-stats! [request]
   (with-channel request channel
     (on-close channel (fn [status] (println "channel closed: " status)))
-    (on-receive channel (fn [data] ;; echo it back
-                          (send! channel data)))))
-
-
+    (populate-stats (stats/all) channel)
+    (stats/on-change #(populate-stats % channel))))
 
 (defroutes stats-routes
-  (GET "/stats" [] get-stats!)
-  (ANY "/stats-ws" [] get-stats-ws!))
+  (GET "/stats-ws" [] get-stats!))

@@ -1,5 +1,6 @@
 (ns jagents.stats
-  (:require [clojure.java.io :as io])
+  (:require [clojure.java.io :as io]
+            [clojure.data :as data])
   (:import [java.net ServerSocket]))
 
 (defn- receive
@@ -8,6 +9,20 @@
   (.readLine (io/reader socket)))
 
 (def stats-data (atom []))
+
+
+(defn all
+  []
+  @stats-data)
+
+(defn on-change
+  [clb]
+  (add-watch
+   stats-data
+   :my-key
+   (fn [k r old new]
+     (clb (remove nil? (get (data/diff old new) 1))))))
+
 
 (defn- add-message
   [msg]

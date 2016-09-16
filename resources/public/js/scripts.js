@@ -1,19 +1,11 @@
 (function ($) {
-    var getStats = function (callback) {
-        $.ajax({
-            url: '/stats'
-        }).done(callback)
-    };
+    var exampleSocket = new WebSocket("ws://localhost:8080/stats-ws");
+
 
     var statsBox = document.getElementById('statsBox');
 
-    document.getElementById('refresh').onclick = function () {
-        getStats(function(result) {
-            statsBox.innerHTML += result
-        });
+    exampleSocket.onmessage = function (event) {
+        statsBox.innerHTML += "<li>" + event.data+ "</li>";
     }
-
-    var exampleSocket = new WebSocket("ws://localhost:5000/stats-ws");
-   // exampleSocket.send("Ding !");
 
 })($);
