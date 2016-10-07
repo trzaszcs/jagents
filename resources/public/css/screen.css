@@ -8,3 +8,9 @@ h1 {
     text-align: center;
 }
 
+
+#statsBox div{
+    border: 1px solid green;
+    margin:10px;
+    padding:5px;
+}

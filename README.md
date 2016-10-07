@@ -15,6 +15,13 @@ To start a web server for the application, run:
     lein repl
     (start true)
 
+
+## Telnet
+
+telnet localhost 9999
+
+{"methodName":"methodName","executionTime": 234,"args": "some args","callStack": "STACK"}
+
 ## License
 
 Copyright © 2016 FIXME
