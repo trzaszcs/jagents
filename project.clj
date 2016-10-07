@@ -7,11 +7,7 @@
                  [ring "1.5.0"]
                  [ring-server "0.4.0"]
                  [http-kit "2.1.18"]]
-  :main jagents.handler
-  :plugins [[lein-ring "0.9.7"]]
-  :ring {:handler jagents.handler/app
-         :init jagents.handler/init
-         :destroy jagents.handler/destroy}
+  :main jagents.server
   :profiles
   {:uberjar {:aot :all}
    :production {:ring {:open-browser? false, :stacktraces? false, :auto-reload? false}}
