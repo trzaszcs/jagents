@@ -20,7 +20,7 @@ To start a web server for the application, run:
 
 telnet localhost 9999
 
-{"methodName":"methodName","executionTime": 234,"args": "some args","callStack": "STACK"}
+{"methodName":"methodName","durationTime": 234,"args": "some args","callStack": "STACK", "statsTime": "2016-10-10T13:59:57.917+02:00"}
 
 ## License
 

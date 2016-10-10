@@ -9,8 +9,12 @@ h1 {
 }
 
 
-#statsBox div{
+#statsBox > li{
     border: 1px solid green;
     margin:10px;
     padding:5px;
+}
+
+#statsBox li {
+    list-style: none;
 }
