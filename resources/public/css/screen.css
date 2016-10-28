@@ -11,10 +11,24 @@ h1 {
 
 #statsBox > li{
     border: 1px solid green;
-    margin:10px;
-    padding:5px;
+    margin: 10px;
+    padding: 5px;
+    display: table;
 }
 
 #statsBox li {
     list-style: none;
+}
+
+#statsBox ul {
+    padding: 0;
+}
+
+#statsBox li ul li ul{
+    padding-left: 20px;
+}
+
+#statsBox li ul li span {
+    font-weight: bold;
+    margin-right: 5px;
 }

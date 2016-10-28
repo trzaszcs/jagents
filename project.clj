@@ -6,7 +6,8 @@
                  [hiccup "1.0.5"]
                  [ring "1.5.0"]
                  [ring-server "0.4.0"]
-                 [http-kit "2.1.18"]]
+                 [http-kit "2.1.18"]
+                 [org.clojure/data.json "0.2.6"]]
   :main jagents.server
   :profiles
   {:uberjar {:aot :all}

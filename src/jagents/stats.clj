@@ -1,28 +1,27 @@
 (ns jagents.stats
-  (:require [clojure.java.io :as io]
-            [clojure.data :as data])
-  (:import [java.net ServerSocket]))
-
-(defn- receive
-  "Read a line of textual data from the given socket"
-  [socket]
-  (.readLine (io/reader socket)))
+  (:require [clojure.data :as data]
+            [jagents.sockserv :as sockserv]
+            [clojure.data.json :as json]))
 
 (def stats-data (atom []))
-
 
 (defn all
   []
   @stats-data)
 
-(defn on-change
-  [clb]
+(defn register
+  [client-id clb]
   (add-watch
    stats-data
-   :my-key
+   client-id
    (fn [k r old new]
      (clb (remove nil? (get (data/diff old new) 1))))))
 
+(defn unregister
+  [client-id]
+  (remove-watch
+   stats-data
+   client-id))
 
 (defn- add-message
   [msg]
@@ -31,16 +30,20 @@
    (fn [stats]
      (conj stats msg))))
 
+(defn- enhance
+  [message ip-addr]
+  (let [msg-as-map (json/read-str message)]
+    (assoc msg-as-map :source-ip ip-addr)))
+
+(defn on-message
+  [id ip msg]
+  (add-message (enhance msg ip)))
+
 (defn- socket-listen
   [port]
-    (with-open [server-sock (ServerSocket. port)
-                sock (.accept server-sock)]
-      (while true
-        (let [msg (receive sock)]
-          (println "received" msg)
-          (add-message msg)))))
+  (sockserv/start port on-message))
 
 (defn listen
   [port]
   (println "listening on port ..." port)
-  (future (socket-listen port)))
+  (socket-listen port))
