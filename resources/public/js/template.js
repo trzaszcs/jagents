@@ -14,12 +14,13 @@ var templateBuilder = (function ($) {
         return $('<span>').text(name);
     }
 
-    var buildFunctionCallItem = function (name, args, durationTime, callStack, statsTime) {
+    var buildFunctionCallItem = function (id, name, args, durationTime, callStack, statsTime) {
         var container = $('<li>');
 
         var ul = $('<ul>');
         ul.appendTo(container);
 
+        $('<li>').append(buildName("id:"), id).appendTo(ul);
         $('<li>').append(buildName("method:"), name).appendTo(ul);
         var argsLi = $('<li>');
         argsLi.append(buildName('args:'), buildList(args));
@@ -33,7 +34,7 @@ var templateBuilder = (function ($) {
     };
 
     var addItem = function (entry) {
-      statsBox.append(buildFunctionCallItem(entry.methodName, entry.args, entry.durationTime, entry.callStack, entry.statsTime));
+        statsBox.prepend(buildFunctionCallItem(entry.id, entry.methodName, entry.args, entry.durationTime, entry.callStack, entry.statsTime));
     }
     return {
         addStatsItem: addItem
