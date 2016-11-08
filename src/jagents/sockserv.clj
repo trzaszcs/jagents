@@ -11,7 +11,7 @@
   (.toString (.getHostName (.getRemoteSocketAddress socket))))
 
 (defn- consume
-  [socket callback]
+  [socket new-msg-callback]
   (try
     (with-open [stream (new java.io.BufferedReader (new java.io.InputStreamReader (.getInputStream socket)))]
       (with-local-vars [msg ""
@@ -21,29 +21,29 @@
           (var-set msg (.readLine stream))
           (when @msg
             (println "received msg from" @client-id)
-            (callback @client-id @client-ip  @msg))
+            (new-msg-callback @client-id @client-ip  @msg))
           )))
     (finally (.close socket)))
 )
 
 (defn- start-client
-  [socket callback]
+  [socket new-msg-callback]
   (swap!
    clients
-   #(conj % (future (consume socket callback)))))
+   #(conj % (future (consume socket new-msg-callback)))))
 
 (defn- socket-listen
-  [port callback]
+  [port new-msg-callback]
   (with-open [server-sock (ServerSocket. port)]
     (while true 
       (let [sock (.accept server-sock)]
-        (start-client sock callback)))
+        (start-client sock new-msg-callback)))
   (println "server socket closed")))
 
 (defn start
-  [port callback]
+  [port new-msg-callback]
   (println "listening on port ..." port)
-  (reset! server (future (socket-listen port callback))))
+  (reset! server (future (socket-listen port new-msg-callback))))
 
 (defn stop
   []

@@ -5,6 +5,8 @@
 
 (def stats-data (atom []))
 
+(def msg-id (atom 0))
+
 (defn all
   []
   @stats-data)
@@ -32,8 +34,9 @@
 
 (defn- enhance
   [message ip-addr]
-  (let [msg-as-map (json/read-str message)]
-    (assoc msg-as-map :source-ip ip-addr)))
+  (let [msg-as-map (json/read-str message)
+        new-id (swap! msg-id inc)]
+    (assoc msg-as-map :id new-id :source-ip ip-addr)))
 
 (defn on-message
   [id ip msg]
